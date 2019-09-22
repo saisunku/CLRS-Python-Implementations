@@ -5,7 +5,7 @@ Created on Sun Sep  8 12:42:29 2019
 @author: Sai
 """
 import math
-
+import random
 
 # 9/8/2019
 # Insertion sort - Pg 18 CLRS
@@ -230,13 +230,11 @@ def quicksort(A, p=0, r=None):
 #    print(p, r)
 #    print(A)
     
-    q = partition(A, p, r)
-    if q-p > 1:
-        quicksort(A, p, max(0, q-1))
-    if r-q > 1:
-        quicksort(A, min(q+1, len(A)-1), r)
+    if p < r:
+        q = partition(A, p, r)
+        quicksort(A, p, q-1)
+        quicksort(A, q+1, r)
     
-#    print(p, q, r)
     return A
 
 array = [5, 2, 4, 6, 1, 3]
@@ -246,3 +244,39 @@ assert quicksort(array) == [1, 2, 3, 4, 5, 6]
 array = [31, 41, 59, 26, 41, 58]
 #print(quicksort(array))
 assert quicksort(array) == [26, 31, 41, 41, 58, 59]
+
+
+# Randomized partition
+def partition_random(A, p=0, r=None):
+    if r == None:
+        r = len(A)-1
+        
+    rand_idx = random.randint(p, r)
+    tmp = A[rand_idx]
+    A[rand_idx] = A[r]
+    A[r] = tmp
+    
+    return partition(A, p, r)
+
+array = [5, 2, 4, 6, 1, 3]
+partition_random(array)
+print(array)
+
+def quicksort_random(A, p=0, r=None):
+    if r == None:
+        r = len(A)-1
+        
+    if p < r:
+        q = partition_random(A, p, r)
+        quicksort_random(A, p, q-1)
+        quicksort_random(A, q+1, r)
+        
+    return A
+
+array = [5, 2, 4, 6, 1, 3]
+#print(quicksort(array))
+assert quicksort_random(array) == [1, 2, 3, 4, 5, 6]
+
+array = [31, 41, 59, 26, 41, 58]
+#print(quicksort(array))
+assert quicksort_random(array) == [26, 31, 41, 41, 58, 59]
