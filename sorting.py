@@ -186,3 +186,63 @@ assert heapsort(array) == [1, 2, 3, 4, 5, 6]
 array = [31, 41, 59, 26, 41, 58]
 #print(heapsort(array))
 assert heapsort(array) == [26, 31, 41, 41, 58, 59]
+
+
+# Quicksort - Chapter 7 CLRS
+
+# First define the partioning function
+def partition(A, p=0, r=None):
+    # Partition the array A[p:r] for use with Quicksort    
+    if r == None:
+        r = len(A)-1
+
+    i = p - 1    
+    for j_iter in range(r-p):
+        j = j_iter + p
+#        print(j)
+#        print(A)
+        
+        if A[j] < A[r]:
+            i = i + 1
+            tmp = A[i]
+            A[i] = A[j]
+            A[j] = tmp
+    
+    tmp = A[i+1]
+    A[i+1] = A[r]
+    A[r] = tmp
+    
+    return i + 1
+
+array = [5, 2, 4, 6, 1, 3]
+partition(array)
+assert array == [2, 1, 3, 6, 5, 4]
+
+array = [2, 8, 7, 1, 3, 5, 6, 4]
+partition(array)
+assert array == [2, 1, 3, 4, 7, 5, 6, 8]
+
+# Quicksort
+def quicksort(A, p=0, r=None):
+    if r == None:
+        r = len(A)-1
+    
+#    print(p, r)
+#    print(A)
+    
+    q = partition(A, p, r)
+    if q-p > 1:
+        quicksort(A, p, max(0, q-1))
+    if r-q > 1:
+        quicksort(A, min(q+1, len(A)-1), r)
+    
+#    print(p, q, r)
+    return A
+
+array = [5, 2, 4, 6, 1, 3]
+#print(quicksort(array))
+assert quicksort(array) == [1, 2, 3, 4, 5, 6]
+
+array = [31, 41, 59, 26, 41, 58]
+#print(quicksort(array))
+assert quicksort(array) == [26, 31, 41, 41, 58, 59]
