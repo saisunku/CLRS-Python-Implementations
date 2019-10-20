@@ -5,6 +5,9 @@ Created on Sun Oct 20 13:59:50 2019
 @author: Sai
 """
 
+import math
+import copy
+
 class min_priority_queue(object):
     def __init__(self, A):
         self.heap = copy.deepcopy(A)    # Need to have own copy so that the array is unaffected when extract_min is run
