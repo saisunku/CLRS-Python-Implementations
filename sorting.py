@@ -97,13 +97,15 @@ class heap(object):         # Heap class
         self.heap_size = len(self.heap)-1   # Index where the heap ends. Default is the last element
         
         for j in range(math.floor(len(self.heap)/2)-1, -1, -1):
+#            print(j)
             self.max_heapify(j)
         
         
     def max_heapify(self, j):
+#        print(j)
         l = self.left(j)
         r = self.right(j)
-        
+#        print(j)
         largest = j
         
         if l <= self.heap_size and self.heap[l] > self.heap[j]:
@@ -280,3 +282,62 @@ assert quicksort_random(array) == [1, 2, 3, 4, 5, 6]
 array = [31, 41, 59, 26, 41, 58]
 #print(quicksort(array))
 assert quicksort_random(array) == [26, 31, 41, 41, 58, 59]
+
+
+# Given array A of size n which contains integers from p to p+n, sort A in place
+def consecutive_numbers_sort_in_place(A, p=0):
+    j = 0
+    for j in range(len(A)):
+        while A[j] != p+j:
+            pos = A[j] - p
+            
+            tmp = A[pos]
+            A[pos] = A[j]
+            A[j] = tmp
+    return A
+            
+A = [1, 2, 4, 0, 5, 7, 6, 8, 10, 9, 3]
+assert consecutive_numbers_sort_in_place(A) == [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+
+# Counting sort - Pg 195
+def counting_sort(A, max_elem=None):
+    if max_elem == None:
+        max_elem = max(A)
+    
+    # Initialize the output and count arrays
+    out = [0]*len(A)
+    count = [0]*(max_elem+1) # Including zeros
+    
+    # Populate the count array
+    for val in A:
+        count[val] += 1
+#    print(count)
+        
+    # Keep a running sum
+    for idx in range(len(count)-1):
+        idx = idx + 1
+        count[idx] = count[idx] + count[idx-1]
+#    print(count)
+        
+    # Now sort
+    for idx in range(len(A)-1,-1,-1):
+        out[count[A[idx]]-1] = A[idx]
+        count[A[idx]] -= 1
+        
+    return out
+    
+array = [0, 4, 5, 1, 5, 2, 3, 4, 2, 0, 0, 3, 1, 2, 4]
+assert counting_sort(array) == [0, 0, 0, 1, 1, 2, 2, 2, 3, 3, 4, 4, 4, 5, 5]
+
+array = [0, 1, 2, 5, 6, 9, 7, 8, 4, 4, 6, 3, 8, 5, 2, 7, 9, 0, 1, 5, 7, 4, 2, 6, 9]
+assert counting_sort(array) == [0, 0, 1, 1, 2, 2, 2, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 9, 9, 9]
+
+array = [1, 1, 1, 1, 1]
+assert counting_sort(array) == [1, 1, 1, 1, 1]
+
+
+        
+    
+
+    
