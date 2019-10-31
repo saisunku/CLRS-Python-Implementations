@@ -1,6 +1,6 @@
 from queue import Queue
 
-# Basic graph algorithms
+# Basic graph algorithms - Breadth-first search
 
 # Data structures for representing graphs
 
@@ -20,10 +20,12 @@ class graph(object):
 		self.root.depth = 0
 		self.nodes = nodes	# List of nodes
 		
-		for idx, node in enumerate(nodes):	# The vertex index for each node is the position of the node in the list
-			node.num = idx
+		for idx, cur_node in enumerate(nodes):	# The vertex index for each node is the position of the node in the list
+			if not isinstance(cur_node, node):
+				raise TypeError
+			cur_node.num = idx
 
-# Breadth-first search
+# Breadth-first search - Pg 595
 def BFS(graph, root=None):
 	if root == None:
 		root = graph.root
@@ -43,12 +45,15 @@ def BFS(graph, root=None):
 			# print(neighbor)
 			if graph.nodes[neighbor].visited == False:
 				node_queue.put(graph.nodes[neighbor])
+
+				# For a node to be marked as visited, it needs a predecessor and depth
 				graph.nodes[neighbor].pred = cur_node
 				graph.nodes[neighbor].depth = cur_node.depth + 1
 				graph.nodes[neighbor].visited = True
 			
 
 # Print path - Make sure you run BFS before running this
+# Pg 601 CLRS
 def print_path(graph, node):
 	if node.num == graph.root.num:
 		print(graph.root.num)
@@ -60,7 +65,7 @@ def print_path(graph, node):
 
 
 
-# Test BFS
+# Test BFS - test case from Pg 590 CLRS
 n0 = node(); n0.adj = [1, 4];
 n1 = node(); n1.adj = [0, 4, 2, 3];
 n2 = node(); n2.adj = [1, 3];
@@ -79,3 +84,4 @@ assert n0.depth == 2
 print_path(G, n4)
 print('\n')
 print_path(G, n0)
+
