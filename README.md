@@ -33,3 +33,12 @@ Python implementations of some algorithms from the CLRS textbook
 #### Greedy algorithm for activity selection (greedy_activity_selection.py)
 
 #### Huffman code for data compression (huffman.py)
+
+#### Basic graph algorithms
+- Breadth-first search (bfs.py)
+- Depth-first search (dfs.py)
+- Topological sorting of a directed acyclic graph (DAG) (dfs.py)
+
+#### Prim's algorithm for minimum spanning tree (min_span_tree.py)
+
+#### Dijkstra's algorthm for shortest paths (shortest_paths.py)
