@@ -1,5 +1,5 @@
 # CLRS-Python-Implementations
-Python implementations of some algorithms from the CLRS textbook
+Python implementations of some algorithms from the CLRS textbook https://en.wikipedia.org/wiki/Introduction_to_Algorithms
 
 #### Sorting (sorting.py)
 
