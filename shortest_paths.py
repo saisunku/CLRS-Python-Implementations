@@ -33,7 +33,62 @@ class graph(object):
 		return keys
 
 
-# Min priority queue of nodes that operates on a key that can be arbitrarily set
+# Relaxation function for Bellman-Ford algorithm
+def relax_bf(u, v, weight):
+	if v.key > u.key + weight:
+		v.key = u.key + weight
+		v.pred = u
+	
+
+# Bellman-Ford algorithm
+def bellman_ford(graph, source=None):
+	if source == None:
+		source = graph.root
+	
+	source.key = 0
+
+	for j in range(len(graph.nodes)-1):	# Relax all edges V-1 times
+		for node in graph.nodes:
+			for idx, adj_node in enumerate(node.adj):
+				relax_bf(node, graph.nodes[adj_node], node.weight[idx])
+
+	for node in graph.nodes:	# Check for negative cycles by testing if the weights change after another relaxation
+		for idx, adj_node in enumerate(node.adj):
+			if graph.nodes[adj_node].key > node.key + node.weight[idx]:
+				return False
+
+	return True
+
+# Test case from Pg 652
+n0 = node(); n1 = node(); n2 = node(); n3 = node(); n4 = node();
+n0.adj = [1, 3]; n0.weight = [6, 7];
+n1.adj = [2, 3, 4]; n1.weight = [5, 8, -4];
+n2.adj = [1]; n2.weight = [-2];
+n3.adj = [2, 4]; n3.weight = [-3, 9];
+n4.adj = [0, 2]; n4.weight = [2, 7];
+
+G = graph([n0, n1, n2, n3, n4], root=n0)
+
+bellman_ford(G)
+
+assert G.get_keys() == [0, 2, 4, 7, -2]
+
+
+# Simple test case with a negative cycle
+n0 = node(); n1 = node(); n2 = node(); n3 = node(); n4 = node();
+n0.adj = [1, 4]; n0.weight = [3, 2];
+n1.adj = [2]; n1.weight = [6];
+n2.adj = [3, 4]; n2.weight = [-7, 5];
+n3.adj = [0]; n3.weight = [-3];
+n4.adj = []; n4.weight = [];
+
+G = graph([n0, n1, n2, n3, n4], root=n0)
+
+assert bellman_ford(G) == False
+
+
+
+# Min priority queue of nodes that operates on a key that can be arbitrarily set - for Dijkstra's algorithm
 class min_priority_queue(object):
 	def __init__(self, A):
 		self.heap = copy.deepcopy(A)    # Need to have own copy so that the graph nodes are unaffected by extract_min 
@@ -105,12 +160,14 @@ class min_priority_queue(object):
 			k = self.parent(k)
 
 
-def relax(u, v, weight, heap):
+def relax_dijkstra(u, v, weight, heap):
+	# Relaxation function for Dijkstra's algorithm which also calls the 'decrease_key' function at the end
 	# print('v. key, u.key, weight '+str(v.key)+' '+str(u.key)+' '+str(weight))
 	if v.key > u.key + weight:
 		v.key = u.key + weight
 		v.pred = u
 		heap.decrease_key(v.num, u.key + weight)
+
 
 # Dijkstra's algorithm
 def dijkstra(graph, root=None):
@@ -126,7 +183,7 @@ def dijkstra(graph, root=None):
 
 		for node, weight in zip(cur_node.adj, cur_node.weight):
 			# print(node, weight)
-			relax(cur_node, graph.nodes[node], weight, heap)
+			relax_dijkstra(cur_node, graph.nodes[node], weight, heap)
 
 
 # Graph from Pg 659 of CLRS
@@ -142,3 +199,6 @@ G = graph([n0, n1, n2, n3, n4], root=n0)
 dijkstra(G)
 
 assert G.get_keys() == [0, 8, 9, 5, 7]
+
+
+
