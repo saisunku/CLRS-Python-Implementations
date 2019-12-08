@@ -41,4 +41,6 @@ Python implementations of some algorithms from the CLRS textbook https://en.wiki
 
 #### Prim's algorithm for minimum spanning tree (min_span_tree.py)
 
-#### Dijkstra's algorthm for shortest paths (shortest_paths.py)
+#### Shortest path algorithms (shortest_paths.py)
+- Bellman-Ford algorithm for graphs with negative edges
+- Dijkstra's algorithm
